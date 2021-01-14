@@ -1,7 +1,8 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
+import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { fetchArticles, fetchArticle } from '@/repositories/cms'
-import { Article } from '@/types/cms'
+import type { Article } from '@/types/cms'
 import styles from '@/styles/Home.module.css'
 
 type Params = {
@@ -21,8 +22,14 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const articleId = (params as Params).slug as string
+  const articleId = (params as Params).slug
   const article = await fetchArticle(articleId)
+
+  if (!article) {
+    return {
+      notFound: true,
+    }
+  }
 
   return {
     props: {
@@ -31,7 +38,15 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
 }
 
-const Home: NextPage<Props> = ({ article }) => {
+const ArticlePage: NextPage<Props> = ({ article }) => {
+  const router = useRouter()
+
+  console.log(article)
+
+  if (router.isFallback) {
+    return <div>Loading...</div>
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -54,4 +69,4 @@ const Home: NextPage<Props> = ({ article }) => {
   )
 }
 
-export default Home
+export default ArticlePage

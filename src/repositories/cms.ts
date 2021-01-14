@@ -1,4 +1,4 @@
-import { Article, Response } from '@/types/cms'
+import type { Article, Response } from '@/types/cms'
 
 const endpoint = process.env.CMS_ENDPOINT
 const config = {
@@ -16,10 +16,16 @@ export const api = async <T>(url: string): Promise<T> => {
   return json
 }
 
-export const fetchArticle = async (articleId: string): Promise<Article> => {
+export const fetchArticle = async (
+  articleId: string
+): Promise<Article | null> => {
   const url = `${endpoint}/${articleId}`
-  const result = await api<Article>(url)
-  return result
+  try {
+    const result = await api<Article>(url)
+    return result
+  } catch {
+    return null
+  }
 }
 
 export const fetchArticles = async (limit?: number): Promise<Article[]> => {
