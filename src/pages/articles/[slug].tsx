@@ -41,8 +41,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 const ArticlePage: NextPage<Props> = ({ article }) => {
   const router = useRouter()
 
-  console.log(article)
-
   if (router.isFallback) {
     return <div>Loading...</div>
   }
