@@ -1,30 +1,22 @@
 import { GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
+import { fetchArticles } from '@/repositories/cms'
+import { Article } from '@/types/cms'
 import styles from '@/styles/Home.module.css'
 
 export const getStaticProps: GetStaticProps = async () => {
-  const endpoint = process.env.CMS_ENDPOINT
-  const config = {
-    headers: {
-      'X-API-KEY': process.env.CMS_API_KEY,
-    },
-  }
-  const response = await fetch(`${endpoint}/articles?limit=10`, config)
-  if (!response.ok) {
-    throw new Error(response.statusText)
-  }
-  const result = await response.json()
+  const articles = await fetchArticles(10)
 
   return {
     props: {
-      articles: result.contents,
+      articles,
     },
   }
 }
 
 type Props = {
-  articles: any[]
+  articles: Article[]
 }
 
 const Home: NextPage<Props> = ({ articles }) => {
