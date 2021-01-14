@@ -6,11 +6,12 @@ export type Article = {
   thumbnail: {
     url: string
   }
-  createdAt: Date
-  publishedAt: Date
-  revisedAt: Date
-  updatedAt: Date
+  createdAt: string
+  publishedAt: string
+  revisedAt: string
+  updatedAt: string
 }
+
 export type Response = {
   contents: Article[]
   limit: number
